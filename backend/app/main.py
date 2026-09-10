@@ -36,6 +36,13 @@ def health() -> dict[str, str]:
 def list_items() -> list[Item]:
     return _items
 
+@app.get("/api/items/{item_id}", response_model=None)
+def get_item(item_id: int) -> None:
+    for i, item in enumerate(_items):
+        if item.id == item_id:
+            return _items[i]
+    raise HTTPException(status_code=404, detail="Item not found")
+
 
 @app.post("/api/items", status_code=201)
 def create_item(payload: ItemCreate) -> Item:
@@ -53,3 +60,4 @@ def delete_item(item_id: int) -> None:
             del _items[i]
             return
     raise HTTPException(status_code=404, detail="Item not found")
+
