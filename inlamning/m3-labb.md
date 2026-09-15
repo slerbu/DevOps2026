@@ -22,3 +22,5 @@ Det finns inget RUN eller CMD eftersom nginxinc/nginx-unprivileged:alpine gör r
 
 ![alt text](image-7.png)
 
+
+![alt text](image-8.png)
