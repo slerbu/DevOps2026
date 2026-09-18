@@ -45,6 +45,10 @@ def health() -> dict[str, str]:
 def list_items() -> list[Item]:
     return _items
 
+@app.get("/api/items/stats")
+def item_stats() -> Stats:
+    return Stats(count=len(_items), total_characters=_total_characters)
+
 @app.get("/api/items/{item_id}", response_model=None)
 def get_item(item_id: int) -> None:
     for i, item in enumerate(_items):
@@ -52,10 +56,6 @@ def get_item(item_id: int) -> None:
             return _items[i]
     raise HTTPException(status_code=404, detail="Item not found")
 
-
-@app.get("/api/items/stats")
-def item_stats() -> Stats:
-    return Stats(count=len(_items), total_characters=_total_characters)
 
 
 @app.post("/api/items", status_code=201)
@@ -70,9 +70,12 @@ def create_item(payload: ItemCreate) -> Item:
 
 @app.delete("/api/items/{item_id}", status_code=204, response_model=None)
 def delete_item(item_id: int) -> None:
+    global _total_characters
     for i, item in enumerate(_items):
         if item.id == item_id:
+            _total_characters -= len(item.text)
             del _items[i]
+            
             return
     raise HTTPException(status_code=404, detail="Item not found")
 

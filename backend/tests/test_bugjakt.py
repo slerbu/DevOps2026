@@ -5,6 +5,7 @@ from app.main import app
 client = TestClient(app)
 
 # Byggstenar — kopiera och kombinera (fler exempel finns i test_main.py):
+
 #
 #   client.post("/api/items", json={"text": "milk"})     # skapa en anteckning
 #   created = client.post(...).json()                    # ...och få tillbaka objektet
@@ -17,3 +18,12 @@ client = TestClient(app)
 
 
 # Skriv ert test här:
+
+def test_count_items() -> None:     # skapa en anteckning
+   created_1 = client.post("/api/items", json={"text": "milk"}).json()
+   created_2 = client.post("/api/items", json={"text": "bread"}).json()               # ...och få tillbaka objektet
+   
+      
+   client.delete(f"/api/items/{created_1['id']}")         # ta bort en anteckning       # hämta summeringen
+   response = client.get("/api/items/stats")  
+   assert response.json() == {"count": 1, "total_characters": 5}
