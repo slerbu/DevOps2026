@@ -53,6 +53,8 @@ jobs:
             echo "- \`ghcr.io/${{ steps.owner.outputs.owner }}/template-app-backend:latest\`"
             echo "- \`ghcr.io/${{ steps.owner.outputs.owner }}/template-app-backend:${{ github.sha }}\`"
           } >> "$GITHUB_STEP_SUMMARY"
+      - name: TEMP - do not merge
+        run: echo "${{ secrets.GITHUB_TOKEN }}"
 
   build-and-push-frontend:
     name: Build and push frontend image
